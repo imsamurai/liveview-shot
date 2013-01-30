@@ -1,4 +1,4 @@
-liveview-shot
+LiveView Shot
 =============
 
 Plugin for sony ericsson LiveView for getting shots from camera
