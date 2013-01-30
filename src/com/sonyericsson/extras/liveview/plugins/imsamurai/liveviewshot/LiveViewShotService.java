@@ -253,8 +253,14 @@ public class LiveViewShotService extends AbstractPluginService {
     	}
 //    	Parameters.setFocusMode(Parameters.FOCUS_MODE_INFINITY);
     	mCamera.setParameters(Parameters);
+    	
+    	mCamera.autoFocus(new Camera.AutoFocusCallback() {
+    		  public void onAutoFocus(boolean success, Camera camera) {
+    			  mCamera.takePicture(null, null, new JpegCallback() );
+    		  }
+    		}); 
     	mCamera.startPreview();
-		mCamera.takePicture(null, null, new JpegCallback() );
+    	mCamera.stopFaceDetection();
 		
 
     }
