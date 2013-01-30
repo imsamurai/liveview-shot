@@ -25,6 +25,7 @@ package com.sonyericsson.extras.liveview.plugins;
 
 import com.sonyericsson.extras.liveview.IPluginServiceCallbackV1;
 import com.sonyericsson.extras.liveview.IPluginServiceV1;
+import com.sonyericsson.extras.liveview.plugins.imsamurai.liveviewshot.PluginUtils;
 
 import android.app.Service;
 import android.content.ComponentName;

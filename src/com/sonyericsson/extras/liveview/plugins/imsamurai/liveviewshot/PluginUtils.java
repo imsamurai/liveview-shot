@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package com.sonyericsson.extras.liveview.plugins;
+package com.sonyericsson.extras.liveview.plugins.imsamurai.liveviewshot;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -30,6 +30,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.os.Handler;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -38,6 +39,9 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import com.sonyericsson.extras.liveview.plugins.LiveViewAdapter;
+import com.sonyericsson.extras.liveview.plugins.PluginConstants;
 
 /**
  * Utils.
@@ -107,7 +111,7 @@ public final class PluginUtils {
     }
     
     /**
-     * Stores text to an image on file.
+     * Send text to an image on device.
      * 
      * @param liveView Reference to LiveView connection
      * @param pluginId Id of the plugin
@@ -126,20 +130,34 @@ public final class PluginUtils {
             return;
         }
         
-        Canvas canvas = new Canvas(bitmap);
 
         // Set the text properties in the canvas
         TextPaint textPaint = new TextPaint();
         textPaint.setTextSize(fontSize);
         textPaint.setColor(Color.WHITE);
 
+        sendTextBitmap(liveView, pluginId, text, bitmap, textPaint);
+    }
+    
+    /**
+     * Send text to an image on device.
+     * 
+     * @param liveView Reference to LiveView connection
+     * @param pluginId Id of the plugin
+     * @param text The text string
+     * @param bitmap Bitmap
+     * @param textPaint TextPaint
+     */
+    public static void sendTextBitmap(LiveViewAdapter liveView, int pluginId, String text, Bitmap bitmap, TextPaint textPaint) {        
+        Bitmap new_bitmap = bitmap.copy(Bitmap.Config.RGB_565, true);
+    	Canvas canvas = new Canvas(new_bitmap);
         // Create the text layout and draw it to the canvas
-        Layout textLayout = new StaticLayout(text, textPaint, bitmapSizeX, Layout.Alignment.ALIGN_CENTER, 1, 1, false);
+        Layout textLayout = new StaticLayout(text, textPaint, new_bitmap.getWidth(), Layout.Alignment.ALIGN_CENTER, 1, 1, false);
         textLayout.draw(canvas);
         
         try
         { 
-            liveView.sendImageAsBitmap(pluginId, centerX(bitmap), centerY(bitmap), bitmap);
+            liveView.sendImageAsBitmap(pluginId, centerX(new_bitmap), centerY(new_bitmap), new_bitmap);
         } catch(Exception e) {
             Log.d(PluginConstants.LOG_TAG, "Failed to send bitmap", e);
         }
@@ -177,11 +195,9 @@ public final class PluginUtils {
      * @param bitmap
      * @param path
      */
-    public static void sendScaledImage(LiveViewAdapter liveView, int pluginId, Bitmap bitmap) {
+    public static void sendScaledImage(final LiveViewAdapter liveView, final int pluginId, final Bitmap bitmap) {
         try {
-            if(liveView != null) {
-                liveView.sendImageAsBitmap(pluginId, centerX(bitmap), centerY(bitmap), bitmap);
-            }
+        	liveView.sendImageAsBitmap(pluginId, centerX(bitmap), centerY(bitmap), bitmap);
         } catch(Exception e) {
             Log.e(PluginConstants.LOG_TAG, "Failed to send image.", e);
         }

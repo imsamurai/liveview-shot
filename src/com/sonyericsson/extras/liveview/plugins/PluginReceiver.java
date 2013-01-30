@@ -23,6 +23,8 @@
 
 package com.sonyericsson.extras.liveview.plugins;
 
+import com.sonyericsson.extras.liveview.plugins.imsamurai.liveviewshot.PluginUtils;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
